@@ -7,8 +7,40 @@
     <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-    <h1> BlaBlaBlaBla</h1>
+    <h1 class="titol-app">Buscar cançons</h1>
+    <!-- Buttons es troben deshabilitats -->
+    <input type="text" class="buscar-canco" placeholder="Fes una búsqueda">
+    <button id="btnBuscar">Buscar</button>
+    <button id="btnEliminar">Borrar</button>
+    <br>    
+    <br>    
+    <!-- Secció principal -->
+    <div class="main">
+        <!-- Llistat de totes les cançons amb el nom que indiqui -->
+        <section class="section1">
+            <p>Mostro tot el llistat de les cançons + fotos</p>
+            <!-- Inseriré les cartes de manera dinàmica -->
+        </section>
 
+        <!-- Secció on es mostra la cançó específica -->
+        <section class="section2">
+            <section class="section2-de-dins">
+                    <p class="info-artista">Informació artista</p>
+                
+                    <!-- Secció per mostrar l'imatge que hem clicat -->
+                    <section>
+                        <p class="imatge-llista"></p>
+                        <img src="" alt="imatge cançó">
+                    </section>
+            </section>
+            
+            <p class="titol-canço">Llista cançons</p>
+            <p class="info-canço">Informació cançons</p>
+        </section>
+    </div>
+    
     <script type="module" src="env/client.js"></script>
+    <script type="module" src="js/spotty.js"></script>
+
 </body>
 </html>

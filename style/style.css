@@ -1,0 +1,99 @@
+/* Estilo general para el body */
+body {
+    background-color: lightgreen;
+}
+
+/* Títol */
+.titol-app {
+    color: green;
+}
+
+/* Estilo para la zona principal (con las secciones de canciones y detalles) */
+.main {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 20px;
+}
+
+/* Estilo para la sección que contiene las tarjetas (sección de canciones) */
+.section1 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnes */
+    gap: 10px; /* Espacio entre las tarjetas */
+    padding: 10px;
+    border: 1px solid black;
+}
+/* Estils de les imatges */
+.section1 img {
+    width: 100%;
+}
+
+/* Estilo para la sección donde se muestra la información del artista (derecha) */
+.section2 {
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilo de las tarjetas */
+.card {
+    background-color: white;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px; /* Ancho más pequeño */
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 12px; /* Tamaño de fuente reducido */
+}
+
+.card img {
+    width: 100%; /* La imagen ocupará todo el ancho de la tarjeta */
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.card .song-title {
+    font-size: 12px; /* Título de la canción más pequeño */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px; /* Espacio reducido debajo del título */
+}
+
+.card .artist-name {
+    font-size: 10px; /* Nombre del artista más pequeño */
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.card a {
+    font-size: 10px; /* Enlace más pequeño */
+    color: #1db954; /* Color de enlace similar a Spotify */
+    text-decoration: none;
+}
+
+.card a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+
+/* Estilo para la sección de información del artista */
+.section2-de-dins {
+    border: 1px solid black;
+}
+
+/* Estilo para las imágenes dentro de la sección2 */
+.imatge-llista img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Estilo de la sección para mostrar el nombre de la canción */
+.titol-canço {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+}
