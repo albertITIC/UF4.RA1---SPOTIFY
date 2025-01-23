@@ -1,0 +1,11 @@
+/* Estilo general para el body */
+body {
+    background-color: lightgreen;
+    padding: 5%;
+}
+
+button{
+    background-color: green;
+    color: white;
+    border-radius: 2px;
+}

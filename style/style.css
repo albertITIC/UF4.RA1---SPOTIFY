@@ -8,6 +8,13 @@ body {
     color: green;
 }
 
+button{
+    background-color: green;
+    color: white;
+    border-radius: 2px;
+}
+
+
 /* Estilo para la zona principal (con las secciones de canciones y detalles) */
 .main {
     display: grid;
