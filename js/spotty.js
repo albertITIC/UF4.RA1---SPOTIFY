@@ -2,23 +2,41 @@ import { clientId, clientSecret } from "../env/client.js";
 
 let tokenAccess = "";
 
-// Var
-let token = "";
-
 // Seleccionar els botons i l'input per etiquetes
 const buttons = document.querySelectorAll("button");
 const btnBuscar = buttons[0];                                 // Primer botó (Buscar)
 const btnEliminar = buttons[1];                               // Segon botó (Borrar)
-const inputBuscar = document.querySelector(".buscar-canco");  // Camp de text
+const inputBuscar = document.querySelector(".buscar-canco");  // Camp de text. El '.' fa referencia a la classe
+
+// Per el botó de les playlist
+const btnPlaylist = document.querySelector("#btnPlaylist");   // EL '#' és de id's
+
+//Event per redirigir-nos
+btnPlaylist.addEventListener("click", () => autoritzar());
+
 
 // Inicialment deshabilitem els botons
 btnBuscar.disabled = true;
 btnEliminar.disabled = true;
+btnPlaylist.disabled = true;
 
-//Noves variables globals
+//Noves variables globals (punt 2)
 const URL = "https://accounts.spotify.com/authorize";
 const redirectUri = "http://127.0.0.1:5501/playlist.html";
 const scopes = "playlist-modify-private user-library-modify playlist-modify-public";
+
+const autoritzar = function () {
+  const authUrl =
+    URL +
+    `?client_id=${clientId}` +
+    `&response_type=token` +
+    `&redirect_uri=${redirectUri}` +
+    `&scope=${scopes}`;
+
+
+  window.location.assign(authUrl);
+};
+
 
 // Funció per obtenir el token de Spotify
 const getSpotifyAccessToken = function (clientId, clientSecret) {
@@ -51,6 +69,7 @@ const getSpotifyAccessToken = function (clientId, clientSecret) {
       // Habilitar els botons
       btnBuscar.disabled = false;
       btnEliminar.disabled = false;
+      btnPlaylist.disabled = false;
     })
     .catch((error) => {
       // Gestió d'errors en la sol·licitud
@@ -92,7 +111,7 @@ function validarInput() {
     alert("Introdueix un valor més gran o igual a 2 caràcters.");
   } else {
     // Cas vàlid
-    alert("Input vàlid, buscant cançons...");
+    console.log("Resultat de les cançons.");
   }
 }
 
@@ -174,21 +193,3 @@ btnBuscar.addEventListener("click", () => {
     searchSpotifyTracks(query, tokenAccess);
   }
 });
-
-// Funció per el botó playlist (punt 4)
-const autoritzar = function () {
-  const authUrl =
-    URL +
-    `?client_id=${clientId}` +
-    `&response_type=token` +
-    `&redirect_uri=${redirectUri}` +
-    `&scope=${scopes}`;
-
-  window.location.assign(authUrl);
-};
-
-// Funció per obtenir el token de les urls i guardarlo en la varible global
-function getToken() {
-  token = window.location.href.split("access_token=")[1];
-}
-getToken(); 

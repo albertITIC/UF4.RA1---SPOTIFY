@@ -1,11 +1,35 @@
-/* Estilo general para el body */
+/* Estils per la pàgina 2 - Playlists */
 body {
     background-color: lightgreen;
     padding: 5%;
 }
 
+/* Estils pels botons */
 button{
     background-color: green;
     color: white;
     border-radius: 2px;
+}
+
+/* Grid principal per ordenar les columnes */
+.main{
+    display: grid;
+    grid-template-columns: 25% 25% 50%;
+    gap: 5px;
+
+}
+
+.playlist-columna{
+    border: solid 1px black;
+
+}
+
+.cançons-columna{
+    border: solid 1px black;
+    
+}
+
+.cançons-seleccionades-columna{
+    border: solid 1px black;
+    
 }
