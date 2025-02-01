@@ -13,10 +13,10 @@ btnTornar.addEventListener("click", () => tornar());
 
 //Funcio per tornar a la pàgina inicial
 const tornar = function () {
-    window.location.assign('index.html');
+  window.location.assign('index.html');
 };
 
-btnPlaylist.addEventListener("click", () => autoritzar());
+
 
 // const accessToken = window.local.href.split("access_token=")[1];
 // console.log(accessToken)
@@ -42,8 +42,7 @@ const getIdTracksLocalStorage = function(){
 
 // funcio per seleccionar les cançons del local storage
 const getTrackSelected = function (){
-    const llistaTracks = getIdTracksLocalStorage();
-    getTrack();
+  getTrack();
 }
 
 // Consultar les perfil usuari

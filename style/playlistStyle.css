@@ -19,17 +19,28 @@ button{
 
 }
 
-.playlist-columna{
+/* Estils generals per les columnes */
+.playlist-columna,
+.cançons-columna,
+.cançons-seleccionades-columna {
     border: solid 1px black;
-
+    padding: 10px; /* Espaciado interno */
 }
 
+
+/* Columna 1 */
+.playlist-columna{
+    background-color: #95D89E;    
+}
+
+/* Columna 2 */
 .cançons-columna{
-    border: solid 1px black;
+    background-color: #87C38F;
     
 }
 
+/* Columna 3 */
 .cançons-seleccionades-columna{
-    border: solid 1px black;
+    background-color: #95D89E;
     
 }
