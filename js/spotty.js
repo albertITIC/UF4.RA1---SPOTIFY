@@ -1,103 +1,58 @@
 import { clientId, clientSecret } from "../env/client.js";
 
+// ----------------------------------  CONSTANTS ---------------------------------- 
+const inputBuscar = document.querySelector(".buscar-canco");
+const btnBuscar = document.querySelector(".btnBuscar");   
+const btnEliminar = document.querySelector(".btnEliminar");
+const btnPlaylist = document.querySelector("#btnPlaylist");
+const results = document.querySelector(".section1"); // Donde se mostrarán los resultados
+const infoArtista = document.querySelector(".section2-de-dins"); // Info artista
+const infocanç = document.querySelector(".info-canço"); // Info canciones
+
 let tokenAccess = "";
+let offset = 0;
+let totalResults = 0;
 
-// Seleccionar els botons i l'input per etiquetes
-const buttons = document.querySelectorAll("button");
-const btnBuscar = buttons[0];                                 // Primer botó (Buscar)
-const btnEliminar = buttons[1];                               // Segon botó (Borrar)
-const inputBuscar = document.querySelector(".buscar-canco");  // Camp de text
+// Noves variables globals
+const URL = "https://accounts.spotify.com/authorize";
+const redirectUri = "http://127.0.0.1:5501/playlist.html";
+const scopes = "playlist-modify-private user-library-modify playlist-modify-public";
 
-// Inicialment deshabilitem els botons
-btnBuscar.disabled = true;
-btnEliminar.disabled = true;
-
-// Funció per obtenir el token de Spotify
-const getSpotifyAccessToken = function (clientId, clientSecret) {
-  const url = "https://accounts.spotify.com/api/token"; // Endpoint de Spotify
-  const credentials = btoa(`${clientId}:${clientSecret}`); // Codificar credencials
-
-  const header = {
-    Authorization: `Basic ${credentials}`,
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-
-  // Realitzar la sol·licitud POST per obtenir el token
-  fetch(url, {
-    method: "POST",
-    headers: header,
-    body: "grant_type=client_credentials", // Paràmetre requerit per l'API
-  })
-    .then((response) => {
-      // Comprovar si la resposta és vàlida
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-      return response.json(); // Convertir la resposta a JSON
-    })
-    .then((data) => {
-      // Desar el token d'accés
-      tokenAccess = data.access_token;
-      console.log("Token de Spotify obtingut:", tokenAccess);
-
-      // Habilitar els botons
-      btnBuscar.disabled = false;
-      btnEliminar.disabled = false;
-    })
-    .catch((error) => {
-      // Gestió d'errors en la sol·licitud
-      console.error("Error al obtenir el token:", error);
-    });
-};
-
-// Cridar a la funció per obtenir el token en carregar la pàgina
-getSpotifyAccessToken(clientId, clientSecret);
-
-// Funció per habilitar o deshabilitar els botons segons el text a l'input
-const toggleButtons = () => {
-  const hasText = inputBuscar.value.trim().length > 0;
-  btnBuscar.disabled = !hasText; // Habilitar "Buscar" si hi ha text
-  btnEliminar.disabled = !hasText; // Habilitar "Borrar" si hi ha text
-};
-
-// Escoltar canvis al camp de text
-inputBuscar.addEventListener("input", toggleButtons);
-
-// Afegir funcionalitat al botó "Borrar"
-btnEliminar.addEventListener("click", () => {
-  inputBuscar.value = "";       // Buidar el camp de text
-  toggleButtons();              // Deshabilitar els botons novament
+btnPlaylist.addEventListener("click", function () {
+  const authUrl =
+    URL +
+    `?client_id=${clientId}` +
+    `&response_type=token` +
+    `&redirect_uri=${redirectUri}` +
+    `&scope=${scopes}`;
+  window.location.assign(authUrl);
 });
 
-// Informem que ha d'introduir un nom com a paràmetre.
-const btnBuscarCanco = document.getElementById("btnBuscar");
-btnBuscarCanco.addEventListener("click", validarInput);
-
-function validarInput() {
-  const valorInput = inputBuscar.value.trim(); // Eliminem espais al principi i al final
-
-  if (valorInput === "") {
-    // Comprovem si l'input està buit
-    alert("No s'ha introduït cap element");
-  } else if (valorInput.length < 2) {
-    // Comprovem si el valor té menys de 2 caràcters
+// ----------------------------------  VALIDACIÓN INPUT ---------------------------------- 
+const validarInput = () => {
+  const query = inputBuscar.value.trim();
+  if (query === "") {
+    alert("No s'ha introduït cap element.");
+    return false;
+  } else if (query.length < 2) {
     alert("Introdueix un valor més gran o igual a 2 caràcters.");
-  } else {
-    // Cas vàlid
-    alert("Input vàlid, buscant cançons...");
+    return false;
   }
-}
+  return true;
+};
 
-//Funció search
+// ----------------------------------  FUNCIÓN PARA BUSCAR CANCIONES ---------------------------------- 
+const buscarCanciones = () => {
+  if (!validarInput()) return; // Si la validación falla, no se ejecuta la búsqueda
+
+  const query = inputBuscar.value.trim();
+  searchSpotifyTracks(query, tokenAccess);
+};
+
+// ----------------------------------  FUNCIÓN QUE CONSULTA SPOTIFY ---------------------------------- 
 const searchSpotifyTracks = function (query, accessToken) {
-  // Definim l'endpoint, la query és el valor de cerca.
-  // Limitem la cerca a cançons i retornarà 12 resultats.
-  const searchUrl =
-    `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-      query
-    )}&type=track&limit=12`;
+  const searchUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=12&offset=${offset}`;
 
-  // Al headers sempre s'ha de posar la mateixa informació.
   fetch(searchUrl, {
     method: "GET",
     headers: {
@@ -106,63 +61,126 @@ const searchSpotifyTracks = function (query, accessToken) {
     },
   })
     .then((response) => {
-      // Comprovar si la resposta és correcta
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
       return response.json();
     })
     .then((data) => {
-      // Netejar els resultats previs
-      const section1 = document.querySelector(".section1");
-      section1.innerHTML = ''; // Netejar els resultats previs
+      results.innerHTML = ""; // Limpiar resultados previos
+      totalResults += data.tracks.items.length;
 
-      const tracks = data.tracks.items;
-      
-      // Si no hi ha resultats
-      if (tracks.length === 0) {
-        section1.innerHTML = "<p>No s'han trobat resultats.</p>";
+      if (!data.tracks.items.length) {
+        results.textContent = "No hi han resultats.";
         return;
       }
 
-      // Mostrar els resultats
-      tracks.forEach((track) => {
-        const trackElement = document.createElement("div");
-        trackElement.classList.add("track");
-
-        const trackImage = document.createElement("img");
-        trackImage.src = track.album.images[0].url; // Imatge de la cançó
-        trackImage.alt = track.name;
-
-        const trackName = document.createElement("p");
-        trackName.textContent = `Cançó: ${track.name}`;
-
-        const artistName = document.createElement("p");
-        artistName.textContent = `Artista: ${track.artists.map(artist => artist.name).join(", ")}`;
-
-        const trackLink = document.createElement("a");
-        trackLink.href = track.external_urls.spotify;
-        trackLink.target = "_blank";
-        trackLink.textContent = "Escoltar a Spotify";
-
-        // Afegir els elements a la secció
-        trackElement.appendChild(trackImage);
-        trackElement.appendChild(trackName);
-        trackElement.appendChild(artistName);
-        trackElement.appendChild(trackLink);
-
-        section1.appendChild(trackElement);
-      });
+      renderizaTrack(data.tracks.items);
     })
-    .catch((error) => {
-      console.error("Error al buscar cançons:", error);
-    });
+    .catch((error) => console.error("Error al buscar cançons:", error));
 };
 
-// Cridar a la funció de cerca quan es fa clic al botó "Buscar"
-btnBuscar.addEventListener("click", () => {
-  const query = inputBuscar.value.trim();
-  if (query !== "") {
-    searchSpotifyTracks(query, tokenAccess);
+// ----------------------------------  RENDERIZAR CANCIONES ---------------------------------- 
+const renderizaTrack = function (infTrack) {
+  infTrack.forEach((track) => {
+    const Objdiv = document.createElement("div");
+    Objdiv.className = "track";
+    Objdiv.innerHTML = `
+      <img src="${track.album.images[0]?.url}" class="imgs" />
+      <p><b>${track.name}</b></p>
+      <p>Artista: ${track.artists[0].name}</p>
+      <p>Album: ${track.album.name}</p>
+      <button class="add-song">+ Afegir cançó</button>
+    `;
+
+    // Mostrar información del artista al hacer clic en la canción
+    Objdiv.addEventListener("click", function () {
+      getInfoArtist(track.artists[0].id);
+    });
+
+    // Guardar la canción en el localStorage al hacer clic en el botón
+    Objdiv.querySelector(".add-song").addEventListener("click", function (e) {
+      e.stopPropagation(); // Evita que el clic active la función del artista
+      guardarCancionEnLocalStorage(track);
+    });
+
+    results.appendChild(Objdiv);
+  });
+};
+
+// ----------------------------------  GUARDAR CANCIÓN EN LOCALSTORAGE ---------------------------------- 
+const guardarCancionEnLocalStorage = (track) => {
+  const storedSongs = JSON.parse(localStorage.getItem("songs")) || [];
+  
+  // Evita duplicados
+  if (!storedSongs.some((song) => song.id === track.id)) {
+    storedSongs.push({
+      id: track.id,
+      name: track.name,
+      artist: track.artists[0].name,
+      album: track.album.name,
+      image: track.album.images[0]?.url,
+    });
+
+    localStorage.setItem("songs", JSON.stringify(storedSongs));
+    alert("Cançó afegida al localStorage!");
+  } else {
+    alert("Aquesta cançó ja està a la playlist.");
   }
+};
+
+// ----------------------------------  MOSTRAR INFO ARTISTA ---------------------------------- 
+const getInfoArtist = function (idArtist) {
+  const url = `https://api.spotify.com/v1/artists/${idArtist}`;
+  fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${tokenAccess}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      infoArtista.innerHTML = `
+        <div class="artist-info">
+          <img src="${data.images[0]?.url}" alt="${data.name}" class="imgsInfo" />
+          <h2>${data.name}</h2>
+          <p>Popularitat: ${data.popularity}</p>
+          <p>Gèneres: ${data.genres.join(", ")}</p>
+          <p>Seguidors: ${data.followers.total}</p>
+        </div>
+      `;
+    })
+    .catch((error) => console.error("Error al obtenir informació de l'artista:", error));
+};
+
+// ----------------------------------  EVENTOS ---------------------------------- 
+btnBuscar.addEventListener("click", buscarCanciones);
+btnEliminar.addEventListener("click", () => {
+  results.innerHTML = "Fes una nova búsqueda";
+  infoArtista.innerHTML = "Informació artista";
+  infocanç.innerHTML = "Informació cançons";
 });
+
+// ----------------------------------  OBTENER TOKEN SPOTIFY ---------------------------------- 
+const getSpotifyAccessToken = function (clientId, clientSecret) {
+  const url = "https://accounts.spotify.com/api/token";
+  const credentials = btoa(`${clientId}:${clientSecret}`);
+  
+  fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      tokenAccess = data.access_token;
+      btnBuscar.disabled = false;
+      btnEliminar.disabled = false;
+    })
+    .catch((error) => console.error("Error al obtenir el token:", error));
+};
+
+getSpotifyAccessToken(clientId, clientSecret);

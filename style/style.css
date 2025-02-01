@@ -1,99 +1,128 @@
-/* Estilo general para el body */
+/* Estil general per al body */
 body {
     background-color: lightgreen;
 }
 
-/* Títol */
+
 .titol-app {
     color: green;
 }
 
-/* Estilo para la zona principal (con las secciones de canciones y detalles) */
+button {
+    background-color: green;
+    color: white;
+    border-radius: 2px;
+}
+
+/* Estil per a la zona principal (amb les seccions de cançons i detalls) */
 .main {
     display: grid;
     grid-template-columns: 60% 40%;
     gap: 20px;
 }
 
-/* Estilo para la sección que contiene las tarjetas (sección de canciones) */
+/* Estil per a la secció que conté les targetes (secció de cançons) */
 .section1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columnes */
-    gap: 10px; /* Espacio entre las tarjetas */
+    gap: 10px; 
     padding: 10px;
-    border: 1px solid black;
 }
-/* Estils de les imatges */
+
+/* Estils per a les imatges */
 .section1 img {
     width: 100%;
 }
 
-/* Estilo para la sección donde se muestra la información del artista (derecha) */
+/* Estil per a la secció on es mostra la informació de l'artista (dreta) */
 .section2 {
-    border: 1px solid black;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Estilo de las tarjetas */
+.section2 img {
+    width: 500px;
+}
+
+/* Estil de les targetes */
 .card {
     background-color: white;
-    border-radius: 8px; /* Bordes redondeados */
+    border-radius: 8px; /* Bordes arrodonits */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 120px; /* Ancho más pequeño */
+    width: 120px; /* Amplada més petita */
     padding: 10px;
     text-align: center;
     display: inline-block;
     transition: transform 0.3s ease;
-    font-size: 12px; /* Tamaño de fuente reducido */
+    font-size: 12px; /* Mida de la lletra reduïda */
 }
 
 .card img {
-    width: 100%; /* La imagen ocupará todo el ancho de la tarjeta */
+    width: 100%; /* La imatge ocuparà tota l'amplada de la targeta */
     border-radius: 6px;
     margin-bottom: 8px;
 }
 
 .card .song-title {
-    font-size: 12px; /* Título de la canción más pequeño */
+    font-size: 12px; /* Títol de la cançó més petit */
     font-weight: bold;
     color: #333;
-    margin-bottom: 4px; /* Espacio reducido debajo del título */
+    margin-bottom: 4px; /* Espai reduït sota el títol */
 }
 
 .card .artist-name {
-    font-size: 10px; /* Nombre del artista más pequeño */
+    font-size: 10px; /* Nom de l'artista més petit */
     color: #555;
     margin-bottom: 8px;
 }
 
 .card a {
-    font-size: 10px; /* Enlace más pequeño */
-    color: #1db954; /* Color de enlace similar a Spotify */
+    font-size: 10px; /* Enllaç més petit */
+    color: #1db954; /* Color d'enllaç similar a Spotify */
     text-decoration: none;
 }
 
 .card a:hover {
-    text-decoration: underline; /* Subrayado al pasar el mouse */
+    text-decoration: underline; /* Subratllat en passar el cursor */
 }
 
-/* Estilo para la sección de información del artista */
+/* Estil per a la secció d'informació de l'artista */
 .section2-de-dins {
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Estilo para las imágenes dentro de la sección2 */
+/* Estil per a les imatges dins de la section2 */
 .imatge-llista img {
     max-width: 100%;
     border-radius: 8px;
 }
 
-/* Estilo de la sección para mostrar el nombre de la canción */
+/* Estil per a la secció que mostra el nom de la cançó */
 .titol-canço {
     font-size: 16px;
     font-weight: bold;
     color: #333;
     margin-top: 20px;
+}
+
+/* Imatges de la dreta */
+.imgs {
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin: 5px auto;
+}
+
+/* Imatge de la informació de l'artista */
+.imgsInfo {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin: 10px auto;
 }

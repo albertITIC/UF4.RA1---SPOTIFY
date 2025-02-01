@@ -1,0 +1,46 @@
+/* Estils per la pàgina 2 - Playlists */
+body {
+    background-color: lightgreen;
+    padding: 5%;
+}
+
+/* Estils pels botons */
+button{
+    background-color: green;
+    color: white;
+    border-radius: 2px;
+}
+
+/* Grid principal per ordenar les columnes */
+.main{
+    display: grid;
+    grid-template-columns: 25% 25% 50%;
+    gap: 5px;
+
+}
+
+/* Estils generals per les columnes */
+.playlist-columna,
+.cançons-columna,
+.cançons-seleccionades-columna {
+    border: solid 1px black;
+    padding: 10px; /* Espaciado interno */
+}
+
+
+/* Columna 1 */
+.playlist-columna{
+    background-color: #95D89E;    
+}
+
+/* Columna 2 */
+.cançons-columna{
+    background-color: #87C38F;
+    
+}
+
+/* Columna 3 */
+.cançons-seleccionades-columna{
+    background-color: #95D89E;
+    
+}
